@@ -1,5 +1,5 @@
 import { logger } from '../../utils/logger.js';
-import { infoEmbed } from '../../utils/embeds.js';
+import { EmbedBuilder } from 'discord.js';
 
 // Keywords that trigger the buy script response
 const BUY_SCRIPT_KEYWORDS = [
@@ -40,14 +40,38 @@ export async function handleKeywordTriggers(message) {
 
 async function handleBuyScriptQuery(message) {
     try {
-        const embed = infoEmbed(
-            "💳 How to Purchase the Script",
-            "Thank you for your interest in our script!\n\n" +
-            "📧 **Contact Information:**\n" +
-            "Reach out to our team to discuss pricing and features.\n\n" +
-            "🔗 **Discord Server:** [Join our community](https://discord.gg/QnWNz2dKCE)\n\n" +
-            "For inquiries, please contact a server administrator or send a direct message."
-        );
+        const embed = new EmbedBuilder()
+            .setColor('#5865F2')
+            .setTitle('💳 Script Access Information')
+            .setDescription(`Hi <@${message.author.id}>, it looks like you're asking about scripts.`)
+            .addFields(
+                {
+                    name: '🔑 How to Get Scripts',
+                    value: 'To get access to our scripts, you have two options:',
+                    inline: false
+                },
+                {
+                    name: '👑 Option 1: Purchase Access',
+                    value: 'Please take a look at <#PURCHASE_CHANNEL_ID> | <#PURCHASE_LINK_CHANNEL> to pay for longer access.',
+                    inline: false
+                },
+                {
+                    name: '🔓 Option 2: Key System',
+                    value: 'Alternatively, check out <#MULTILOADER_CHANNEL> and use our key system to get access to all scripts.',
+                    inline: false
+                },
+                {
+                    name: '💬 Check Your DMs',
+                    value: 'More detailed information has been sent to your DMs!',
+                    inline: false
+                },
+                {
+                    name: '⚠️ Important Note',
+                    value: 'Please make sure to follow the instructions in those channels carefully.',
+                    inline: false
+                }
+            )
+            .setFooter({ text: 'Cosmos - Script Support • Today at 11:00 AM' });
 
         await message.reply({
             embeds: [embed],
