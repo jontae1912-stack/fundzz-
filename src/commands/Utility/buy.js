@@ -30,12 +30,12 @@ export default {
                 },
                 {
                     name: '👑 Option 1: Purchase Access',
-                    value: 'Please take a look at <#PURCHASE_CHANNEL_ID> | <#PURCHASE_LINK_CHANNEL> to pay for longer access.',
+                    value: 'Please take a look at <#1522366600550809662> | <#1522366600550809662> to pay for longer access.',
                     inline: false
                 },
                 {
                     name: '🔓 Option 2: Key System',
-                    value: 'Alternatively, check out <#MULTILOADER_CHANNEL> and use our key system to get access to all scripts.',
+                    value: 'Alternatively, check out <#1525325327168045096> and use our key system to get access to all scripts.',
                     inline: false
                 },
                 {
@@ -49,7 +49,7 @@ export default {
                     inline: false
                 }
             )
-            .setFooter({ text: 'Cosmos - Script Support • Today at 11:00 AM' });
+            .setFooter({ text: 'fundz - Script Support • Today' });
 
         await InteractionHelper.safeEditReply(interaction, {
             embeds: [embed],
