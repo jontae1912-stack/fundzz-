@@ -1,9 +1,7 @@
 import { SlashCommandBuilder, EmbedBuilder } from 'discord.js';
 import { logger } from '../../utils/logger.js';
 import { InteractionHelper } from '../../utils/interactionHelper.js';
-
-// Replace this with your actual voucher channel ID
-const VOUCH_CHANNEL_ID = '1522366617529618433';
+import { getGuildConfig } from '../../services/config/guildConfig.js';
 
 export default {
     data: new SlashCommandBuilder()
@@ -35,14 +33,6 @@ export default {
         const deferSuccess = await InteractionHelper.safeDefer(interaction);
         if (!deferSuccess) {
             logger.warn(`Vouch command defer failed`);
-            return;
-        }
-
-        // Check if command is used in the correct channel
-        if (interaction.channelId !== 1522366617529618433) {
-            await InteractionHelper.safeEditReply(interaction, {
-                content: `❌ This command can only be used in <#${1522366617529618433}>!`,
-            });
             return;
         }
 
@@ -125,7 +115,7 @@ export default {
                         inline: true
                     }
                 )
-                .setFooter({ text: `fundzz • Verified Feedback • ${new Date().toLocaleString('en-US', { weekday: 'long', hour: '2-digit', minute: '2-digit' })}` });
+                .setFooter({ text: `Cosmos • Verified Feedback • ${new Date().toLocaleString('en-US', { weekday: 'long', hour: '2-digit', minute: '2-digit' })}` });
 
             await InteractionHelper.safeEditReply(interaction, {
                 content: `✅ Vouch submitted successfully for ${vouchedUser}!`,
