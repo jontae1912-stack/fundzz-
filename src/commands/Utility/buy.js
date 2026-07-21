@@ -40,7 +40,7 @@ export default {
                 },
                 {
                     name: '💬 Need Help?',
-                    value: 'If you have any questions or need assistance, open a support ticket and our staff will help you.',
+                    value: 'If you have any questions or need assistance, open a support ticket and our staff will help you!.',
                     inline: false
                 },
                 {
