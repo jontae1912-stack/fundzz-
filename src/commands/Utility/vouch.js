@@ -39,9 +39,9 @@ export default {
         }
 
         // Check if command is used in the correct channel
-        if (interaction.channelId !== VOUCH_CHANNEL_ID) {
+        if (interaction.channelId !== 1522366617529618433) {
             await InteractionHelper.safeEditReply(interaction, {
-                content: `❌ This command can only be used in <#${VOUCH_CHANNEL_ID}>!`,
+                content: `❌ This command can only be used in <#${1522366617529618433}>!`,
             });
             return;
         }
