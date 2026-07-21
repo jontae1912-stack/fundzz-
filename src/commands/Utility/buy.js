@@ -21,7 +21,7 @@ export default {
         const embed = new EmbedBuilder()
             .setColor('#5865F2')
             .setTitle('💳 Script Access Information')
-            .setDescription(`Hi <@${interaction.user.id}>, it looks like you're asking about scripts.`)
+            .setDescription(`Hi <@${interaction.user.id}>, here's how you can get access to our scripts.`)
             .addFields(
                 {
                     name: '🔑 How to Get Scripts',
@@ -30,26 +30,29 @@ export default {
                 },
                 {
                     name: '👑 Option 1: Purchase Access',
-                    value: 'Please take a look at <1522366600550809662> | <1522366600550809662> to pay for longer access.',
+                    value: 'Please take a look at <#1522366600550809662> to purchase lifetime or longer access.',
                     inline: false
                 },
                 {
                     name: '🔓 Option 2: Key System',
-                    value: 'Alternatively, check out <1525325327168045096> and use our key system to get access to all scripts.',
+                    value: 'Alternatively, check out <#1525325327168045096> and use our key system to get access to all scripts.',
                     inline: false
                 },
                 {
-                    name: '💬 Check Your DMs',
-                    value: 'More detailed information has been sent to your DMs!',
+                    name: '💬 Need Help?',
+                    value: 'If you have any questions or need assistance, open a support ticket and our staff will help you.',
                     inline: false
                 },
                 {
-                    name: '⚠️ Important Note',
-                    value: 'Please make sure to follow the instructions in those channels carefully.',
+                    name: '⚠️ Important',
+                    value: 'Please read all instructions in the channels above before opening a ticket.',
                     inline: false
                 }
             )
-            .setFooter({ text: 'fundz - Script Support • Today' });
+            .setFooter({
+                text: 'fundz • Script Support'
+            })
+            .setTimestamp();
 
         await InteractionHelper.safeEditReply(interaction, {
             embeds: [embed],
