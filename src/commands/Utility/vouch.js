@@ -3,7 +3,7 @@ import { logger } from '../../utils/logger.js';
 import { InteractionHelper } from '../../utils/interactionHelper.js';
 
 // Replace this with your actual voucher channel ID
-const VOUCH_CHANNEL_ID = 'YOUR_CHANNEL_ID_HERE';
+const VOUCH_CHANNEL_ID = '1522366617529618433';
 
 export default {
     data: new SlashCommandBuilder()
