@@ -125,7 +125,7 @@ export default {
                         inline: true
                     }
                 )
-                .setFooter({ text: `Cosmos • Verified Feedback • ${new Date().toLocaleString('en-US', { weekday: 'long', hour: '2-digit', minute: '2-digit' })}` });
+                .setFooter({ text: `fundzz • Verified Feedback • ${new Date().toLocaleString('en-US', { weekday: 'long', hour: '2-digit', minute: '2-digit' })}` });
 
             await InteractionHelper.safeEditReply(interaction, {
                 content: `✅ Vouch submitted successfully for ${vouchedUser}!`,
