@@ -30,12 +30,12 @@ export default {
                 },
                 {
                     name: '👑 Option 1: Purchase Access',
-                    value: 'Please take a look at <#1522366600550809662> | <#1522366600550809662> to pay for longer access.',
+                    value: 'Please take a look at <1522366600550809662> | <1522366600550809662> to pay for longer access.',
                     inline: false
                 },
                 {
                     name: '🔓 Option 2: Key System',
-                    value: 'Alternatively, check out <#1525325327168045096> and use our key system to get access to all scripts.',
+                    value: 'Alternatively, check out <1525325327168045096> and use our key system to get access to all scripts.',
                     inline: false
                 },
                 {
