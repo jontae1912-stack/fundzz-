@@ -39,8 +39,8 @@ export default {
                     inline: false
                 },
                 {
-                    name: '💬 Check Your DMs',
-                    value: 'More detailed information has been sent to your DMs!',
+                    name: '💬 make a ticket',
+                    value: 'Make a ticket for help on how to buy it!',
                     inline: false
                 },
                 {
