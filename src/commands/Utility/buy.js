@@ -35,7 +35,7 @@ export default {
                 },
                 {
                     name: '🔓 Option 2: Key System',
-                    value: 'Alternatively, check out <#1525325327168045096> and use our key system to get access to all scripts.',
+                    value: 'Alternatively, check out <#1525325327168045096> and use our key system to get access to the script.',
                     inline: false
                 },
                 {
