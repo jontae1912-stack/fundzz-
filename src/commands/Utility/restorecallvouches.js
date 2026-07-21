@@ -3,6 +3,9 @@ import { logger } from '../../utils/logger.js';
 import { InteractionHelper } from '../../utils/interactionHelper.js';
 import { isBotOwner } from '../../config/bot.js';
 
+// Replace this with your actual voucher channel ID
+const VOUCH_CHANNEL_ID = 'YOUR_CHANNEL_ID_HERE';
+
 export default {
     data: new SlashCommandBuilder()
         .setName('restorecallvouches')
@@ -25,6 +28,14 @@ export default {
             return;
         }
 
+        // Check if command is used in the correct channel
+        if (interaction.channelId !== VOUCH_CHANNEL_ID) {
+            await InteractionHelper.safeEditReply(interaction, {
+                content: `❌ This command can only be used in <#${VOUCH_CHANNEL_ID}>!`,
+            });
+            return;
+        }
+
         try {
             // Simulate restoring vouches from database
             const restoredCount = 150; // Example count
@@ -44,7 +55,7 @@ export default {
                         inline: false
                     },
                     {
-                        name: '👤 Administrator',
+                        name: '👨‍⚖️ Administrator',
                         value: `${interaction.user.tag}`,
                         inline: false
                     }

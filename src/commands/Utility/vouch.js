@@ -2,6 +2,9 @@ import { SlashCommandBuilder, EmbedBuilder } from 'discord.js';
 import { logger } from '../../utils/logger.js';
 import { InteractionHelper } from '../../utils/interactionHelper.js';
 
+// Replace this with your actual voucher channel ID
+const VOUCH_CHANNEL_ID = 'YOUR_CHANNEL_ID_HERE';
+
 export default {
     data: new SlashCommandBuilder()
         .setName('vouch')
@@ -32,6 +35,14 @@ export default {
         const deferSuccess = await InteractionHelper.safeDefer(interaction);
         if (!deferSuccess) {
             logger.warn(`Vouch command defer failed`);
+            return;
+        }
+
+        // Check if command is used in the correct channel
+        if (interaction.channelId !== VOUCH_CHANNEL_ID) {
+            await InteractionHelper.safeEditReply(interaction, {
+                content: `❌ This command can only be used in <#${VOUCH_CHANNEL_ID}>!`,
+            });
             return;
         }
 
