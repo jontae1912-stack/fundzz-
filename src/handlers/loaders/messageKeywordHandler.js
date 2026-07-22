@@ -4,7 +4,7 @@ import { EmbedBuilder } from 'discord.js';
 // Keywords that trigger the buy script response
 const BUY_SCRIPT_KEYWORDS = [
     'how do i buy the script',
-    'how do you buy the script',
+    'i’m trying to buy the weekly script',
     'how to buy the script',
     'where can i buy the script',
     'how much is the script',
