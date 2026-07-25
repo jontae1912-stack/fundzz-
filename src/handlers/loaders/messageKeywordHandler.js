@@ -8,7 +8,7 @@ const BUY_SCRIPT_KEYWORDS = [
     'how to buy the script',
     'where can i buy the script',
     'how much is the script',
-    'script price',
+    'lemme buy the script',
     'buy script',
     'purchase script',
     'how to purchase the script',
