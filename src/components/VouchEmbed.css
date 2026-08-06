@@ -1,0 +1,71 @@
+/* name=src/components/VouchEmbed.css */
+.ve-wrapper{
+  font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+  color: #e9eef8;
+  padding: 8px 0;
+}
+
+.ve-card{
+  max-width: 640px;
+  background: linear-gradient(180deg, rgba(20,21,23,0.9), rgba(10,11,12,0.9));
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+  border: 1px solid rgba(255,255,255,0.04);
+  box-shadow: 0 10px 30px rgba(2,3,5,0.7), inset 0 1px 0 rgba(255,255,255,0.02);
+  display: flex;
+  flex-direction: column;
+}
+
+.ve-left-stripe{
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 6px;
+  background: linear-gradient(180deg,#8b3be6,#d45cf0);
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+}
+
+.ve-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:14px 18px;
+}
+
+.ve-app{ display:flex; gap:12px; align-items:center; }
+.ve-app-avatar{ width:44px; height:44px; border-radius:10px; object-fit:cover; border:2px solid rgba(255,255,255,0.04); }
+.ve-fallback{ width:44px; height:44px; border-radius:10px; background:linear-gradient(90deg,#42245a,#7a2fbf); }
+.ve-app-name{ font-weight:700; color:#fff; }
+.ve-badge{ margin-left:8px; background:linear-gradient(90deg,#ffffff10,#ffffff20); color:#cfc9ff; font-size:11px; padding:2px 6px; border-radius:6px; font-weight:800; }
+.ve-time{ font-size:12px; color:rgba(255,255,255,0.45); }
+
+.ve-close{ background:transparent; color:rgba(255,255,255,0.5); border:0; font-size:18px; cursor:pointer; }
+
+.ve-body{ padding:6px 18px 18px 18px; }
+.ve-title{ font-size:16px; font-weight:800; margin-bottom:10px; color:#ffffff; }
+
+.ve-comment{ background: linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); padding:12px; border-radius:8px; color:rgba(255,255,255,0.85); margin-bottom:12px; font-size:14px; }
+
+.ve-grid{ display:grid; grid-template-columns: 1fr 1fr; gap:12px; }
+.ve-field{ background: rgba(255,255,255,0.02); padding:10px; border-radius:8px; }
+.ve-field-label{ font-size:12px; color:rgba(255,255,255,0.5); margin-bottom:6px; }
+.ve-field-value{ font-weight:700; color:#fff; }
+.ve-mention{ color:#8cd7ff; }
+
+.ve-rating-row{ display:flex; align-items:center; gap:10px; }
+.ve-stars{ display:flex; gap:6px; }
+.ve-rating-text{ color:rgba(255,255,255,0.6); font-weight:700; }
+
+.ve-banner-wrap{ margin-top:12px; border-radius:8px; overflow:hidden; border:2px solid rgba(255,255,255,0.03); }
+.ve-banner{ width:100%; height:140px; object-fit:cover; display:block; }
+
+.ve-footer{ margin-top:12px; color:rgba(255,255,255,0.5); font-size:13px; }
+
+@media (max-width:600px){
+  .ve-card{ max-width:100%; }
+  .ve-grid{ grid-template-columns: 1fr; }
+  .ve-banner{ height:120px; }
+}

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import VouchCard from './VouchCard';
+import VouchEmbed from './VouchEmbed';
 import AddVouchModal from './AddVouchModal';
 
 export default function VouchList() {
@@ -16,7 +16,6 @@ export default function VouchList() {
   const handleClose = () => setModalOpen(false);
 
   const handleSubmit = (newVouch) => {
-    // Double-check uniqueness
     if (existingRatings.includes(newVouch.rating)) {
       alert('That rating is already used by another staff. Each staff must have a unique rating.');
       return;
@@ -34,7 +33,9 @@ export default function VouchList() {
       </div>
 
       {vouches.map(v => (
-        <VouchCard key={v.id} vouch={v} onAdd={handleAddClick} />
+        <div key={v.id} style={{ marginBottom: 12 }}>
+          <VouchEmbed vouch={v} />
+        </div>
       ))}
 
       <AddVouchModal isOpen={modalOpen} onClose={handleClose} onSubmit={handleSubmit} existingRatings={existingRatings} />
