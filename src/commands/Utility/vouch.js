@@ -1,4 +1,4 @@
-import { SlashCommandBuilder, EmbedBuilder } from 'discord.js';
+import { SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } from 'discord.js';
 import { logger } from '../../utils/logger.js';
 import { InteractionHelper } from '../../utils/interactionHelper.js';
 
@@ -105,9 +105,17 @@ export default {
                 .setFooter({ text: `Cosmos • Verified Feedback` })
                 .setTimestamp(new Date(vouchData.date));
 
+            const addRow = new ActionRowBuilder().addComponents(
+                new ButtonBuilder()
+                    .setCustomId(`vouch_add:${vouchedUser.id}`)
+                    .setLabel('⭐ Add Vouch')
+                    .setStyle(ButtonStyle.Primary)
+            );
+
             await InteractionHelper.safeEditReply(interaction, {
                 content: `✅ Vouch submitted successfully for ${vouchedUser}!`,
                 embeds: [embed],
+                components: [addRow],
             });
 
             logger.info(`Vouch received: ${interaction.user.tag} vouched for ${vouchedUser.tag}`);
