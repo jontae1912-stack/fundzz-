@@ -334,8 +334,34 @@ export default {
             return;
           }
 
-          const [customId, ...args] = interaction.customId.split(':');
-          const button = client.buttons.get(customId);
+          let [customId, ...args] = interaction.customId.split(':');
+          let button = client.buttons.get(customId);
+
+          // Fallback: try to locate a registered handler whose name is a prefix of the customId
+          if (!button) {
+            try {
+              for (const [key, handler] of client.buttons) {
+                if (!key) continue;
+                if (interaction.customId.startsWith(key) || customId.startsWith(key) || interaction.customId.includes(key)) {
+                  button = handler;
+                  // recompute args in case the key matched a prefix inside the customId
+                  const parts = interaction.customId.split(':');
+                  args = parts.slice(1);
+                  logger.debug(`Fallback matched button handler key=${key} for customId=${interaction.customId}`);
+                  break;
+                }
+              }
+
+              if (!button) {
+                logger.warn('Button handler not found for interaction', {
+                  requested: customId,
+                  available: Array.from(client.buttons.keys()).slice(0, 200)
+                });
+              }
+            } catch (fallbackErr) {
+              logger.error('Error during button handler fallback lookup:', fallbackErr);
+            }
+          }
 
           if (!button) {
             if (!interaction.customId.includes(':') || isCollectorManagedComponent(customId)) {
@@ -381,7 +407,7 @@ export default {
           } catch (error) {
             await handleInteractionError(interaction, error, withTraceContext({
               type: 'select_menu',
-              customId: interaction.customId
+              customId,
             }, interactionTraceContext));
           }
         } else if (interaction.isModalSubmit()) {
