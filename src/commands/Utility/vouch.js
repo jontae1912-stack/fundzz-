@@ -54,7 +54,7 @@ export default {
                 nextNumber = null;
             }
 
-            // Determine numeric vouchNumber and displayed vouchId (#N)
+            // Fallback: count existing vouches (if helper exists) or timestamp
             let vouchNumber;
             if (nextNumber !== null && Number.isFinite(Number(nextNumber))) {
                 vouchNumber = Number(nextNumber);
@@ -74,7 +74,7 @@ export default {
                         }
                     }
                 } catch (e) {
-                    logger.warn('Could not fetch vouch count from DB, falling back to 0', e);
+                    logger.warn('Could not fetch vouch count from DB, falling back to timestamp id', e);
                     existingCount = 0;
                 }
 
@@ -85,7 +85,6 @@ export default {
 
             const vouchData = {
                 vouchId,
-                vouchNumber,
                 vouchedUser: vouchedUser.id,
                 vouchedUserTag: vouchedUser.tag,
                 vouchedUserAvatar: vouchedUser.displayAvatarURL({ extension: 'png', size: 512 }),
@@ -98,14 +97,7 @@ export default {
             };
 
             if (interaction.client.db) {
-                // Store under canonical numeric key (no leading #) so sequencing is stable
-                try {
-                    await interaction.client.db.set(getVouchKey(interaction.guildId, vouchNumber), vouchData);
-                } catch (err) {
-                    // fallback to legacy key pattern if set fails
-                    try { await interaction.client.db.set(`guild:${interaction.guildId}:vouch:${vouchId}`, vouchData); } catch {}
-                }
-
+                await interaction.client.db.set(getVouchKey(interaction.guildId, vouchNumber), vouchData);
                 // also try to save to a list if helper exists
                 if (typeof interaction.client.db.appendVouch === 'function') {
                     try { await interaction.client.db.appendVouch(interaction.guildId, vouchData); } catch {};
