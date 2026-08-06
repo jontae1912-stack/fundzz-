@@ -1,0 +1,165 @@
+/* name=src/components/VouchCard.css */
+:root{
+  --bg: #0f1113;
+  --card: #151618;
+  --muted: rgba(255,255,255,0.55);
+  --accent: #b13bd6; /* purple */
+  --panel-border: rgba(255,255,255,0.04);
+}
+
+.vv-wrapper{
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  color: #fff;
+  background: transparent;
+  max-width: 540px;
+  margin: 12px;
+}
+
+.vv-header{
+  margin-bottom: 8px;
+}
+
+.vv-app{
+  display:flex;
+  gap:10px;
+  align-items:center;
+}
+
+.vv-app-avatar{
+  width:36px;
+  height:36px;
+  border-radius:50%;
+  background:linear-gradient(135deg,#3b0f5b,#a02ddc);
+  object-fit:cover;
+  border:2px solid rgba(255,255,255,0.06);
+}
+.vv-app-avatar-fallback{
+  width:36px;
+  height:36px;
+  border-radius:50%;
+  background:linear-gradient(135deg,#3b0f5b,#a02ddc);
+  border:2px solid rgba(255,255,255,0.06);
+}
+
+.vv-app-name{
+  font-weight:600;
+  color:#dfe7ff;
+  font-size:13px;
+}
+
+.vv-app-badge{
+  background:linear-gradient(90deg,#4b1b66,#b13bd6);
+  color:white;
+  font-size:11px;
+  padding:2px 6px;
+  margin-left:8px;
+  border-radius:6px;
+  font-weight:700;
+}
+
+.vv-app-time{
+  font-size:12px;
+  color:var(--muted);
+}
+
+.vv-card{
+  border-radius:8px;
+  border:1px solid var(--panel-border);
+  overflow:hidden;
+  display:block;
+  background: linear-gradient(180deg,#0e0f11 0%, #121214 100%);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+  padding: 12px;
+  border-left: 4px solid var(--accent);
+}
+
+.vv-card-inner{
+  padding: 8px;
+}
+
+.vv-title .vv-star-badge{
+  background: rgba(255,255,255,0.03);
+  color: #f3e6ff;
+  padding:8px 10px;
+  border-radius:6px;
+  display:inline-block;
+  font-weight:700;
+  margin-bottom:10px;
+}
+
+.vv-comment{
+  display:flex;
+  gap:8px;
+  align-items:flex-start;
+  margin-bottom:10px;
+}
+
+.vv-comment-emoji{ font-size:22px; line-height:1; }
+.vv-comment-text{ color:var(--muted); font-size:14px; white-space: pre-wrap; }
+
+.vv-fields{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap:8px 12px;
+  margin:12px 0;
+}
+
+.vv-field{
+  background: rgba(255,255,255,0.02);
+  padding:8px;
+  border-radius:6px;
+}
+
+.vv-field-label{ font-size:11px; color:var(--muted); margin-bottom:6px; }
+.vv-field-value{ font-weight:700; color:#fff; }
+
+.vv-mention{
+  color:#7ad1ff;
+  font-weight:700;
+}
+
+.vv-rating{
+  margin-bottom:10px;
+}
+
+.vv-rating-label{ color:var(--muted); font-size:12px; margin-bottom:6px;}
+.vv-rating-stars{ display:flex; align-items:center; gap:6px; }
+.vv-star{ width:18px; height:18px; }
+
+.vv-rating-text{ color:var(--muted); font-size:13px; margin-left:8px; }
+
+.vv-product{ margin-bottom:12px; color:var(--muted); }
+.vv-product-label{ font-size:12px; color:var(--muted); margin-bottom:6px; }
+.vv-product-value{ font-weight:700; color:#fff; }
+
+.vv-banner-wrap{ margin:10px 0; border-radius:6px; padding:4px; border:2px solid var(--accent); display:flex; justify-content:center; align-items:center; }
+.vv-banner{ width:100%; border-radius:4px; display:block; object-fit:cover; max-height:120px; }
+
+.vv-banner-placeholder{
+  background: linear-gradient(90deg,#25102b,#3b0f45);
+  color:#fff;
+  padding:18px;
+  border-radius:6px;
+  text-align:center;
+  font-weight:700;
+}
+
+.vv-footer{ color:var(--muted); font-size:12px; margin-top:8px; }
+
+.vv-actions{ display:flex; gap:10px; margin-top:12px; }
+.vv-btn{
+  padding:8px 12px;
+  border-radius:8px;
+  font-weight:700;
+  cursor:pointer;
+  border: none;
+}
+.vv-btn-primary{
+  background: linear-gradient(90deg,#4b1b66,#b13bd6);
+  color:white;
+}
+.vv-btn-ghost{
+  background:transparent;
+  color:var(--muted);
+  border:1px solid rgba(255,255,255,0.04);
+}
