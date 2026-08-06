@@ -60,6 +60,43 @@ export default async (client) => {
           }
         }
 
+        // Additionally support legacy/alternate location: src/buttons (register into client.buttons)
+        // This helps when some button handlers live outside src/interactions/buttons
+        if (type === 'buttons') {
+          try {
+            const legacyButtonsPath = join(__dirname, '../../buttons');
+            const legacyFiles = await getAllInteractionFiles(legacyButtonsPath);
+
+            for (const filePath of legacyFiles) {
+              const relativePath = filePath.slice(__dirname.length + 1).replace(/\\/g, '/');
+              try {
+                const module = await import(pathToFileURL(filePath).href);
+                const moduleExport = module.default;
+                const interactions = Array.isArray(moduleExport) ? moduleExport : [moduleExport];
+
+                for (const interaction of interactions) {
+                  if (!interaction?.name || !interaction?.execute) {
+                    logger.warn(`Legacy button ${relativePath} is missing required properties.`);
+                    continue;
+                  }
+
+                  // register into client.buttons to ensure the dispatcher can find it
+                  client.buttons.set(interaction.name, interaction);
+                  loadedCount += 1;
+                  logger.info(`Loaded legacy button: ${interaction.name} (${relativePath})`);
+                }
+              } catch (error) {
+                logger.error(`Error loading legacy button ${relativePath}:`, error);
+              }
+            }
+          } catch (legacyErr) {
+            // It's fine if the legacy buttons dir doesn't exist; only log unexpected errors
+            if (legacyErr.code !== 'ENOENT') {
+              logger.warn('Error while loading legacy buttons:', legacyErr);
+            }
+          }
+        }
+
         logger.info(`Loaded ${loadedCount} ${type}`);
         // Added diagnostic log: show a sample of registered keys so it's easy to validate in startup logs
         try {
