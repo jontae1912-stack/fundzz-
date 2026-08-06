@@ -17,7 +17,7 @@ export default function VouchEmbed({ vouch = {}, onClose }) {
     product,
     bannerUrl,
     footerText,
-    appName = 'Cosmos Vouch',
+    appName = 'fundzz Vouch',
     appAvatar,
   } = vouch;
 
