@@ -363,9 +363,25 @@ export default {
             }
           }
 
+          // BEGIN debug: enhanced logging when handler missing
           if (!button) {
             if (!interaction.customId.includes(':') || isCollectorManagedComponent(customId)) {
               return;
+            }
+
+            try {
+              const registered = client.buttons ? Array.from(client.buttons.keys()) : [];
+              logger.warn('Button handler missing', {
+                event: 'interaction.button.missing_handler',
+                incomingCustomId: interaction.customId,
+                lookedUpPrefix: customId,
+                registeredButtons: registered,
+                traceId: interactionTraceContext.traceId,
+                guildId: interaction.guildId,
+                userId: interaction.user?.id,
+              });
+            } catch (logErr) {
+              logger.error('Failed to log missing button diagnostic info', { error: logErr });
             }
 
             throw createError(
@@ -375,6 +391,7 @@ export default {
               withTraceContext({ customId }, interactionTraceContext)
             );
           }
+          // END debug
 
           try {
             await button.execute(interaction, client, args);
