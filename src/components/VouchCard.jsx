@@ -11,7 +11,7 @@ const Star = ({ filled = false }) => (
   </svg>
 );
 
-export default function VouchCard({ vouch = {} }) {
+export default function VouchCard({ vouch = {}, onAdd }) {
   // Use exactly what the user provides. No placeholder text shown when the field is absent.
   const {
     id,
@@ -117,7 +117,12 @@ export default function VouchCard({ vouch = {} }) {
 
           {/* Actions: only Add Vouch remains */}
           <div className="vv-actions">
-            <button className="vv-btn vv-btn-primary">⭐ Add Vouch</button>
+            <button
+              className="vv-btn vv-btn-primary"
+              onClick={() => onAdd && onAdd()}
+            >
+              ⭐ Add Vouch
+            </button>
           </div>
 
           {!hasAnyField && (

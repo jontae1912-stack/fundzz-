@@ -1,0 +1,31 @@
+/* name=src/components/AddVouchModal.css */
+.av-modal-backdrop{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.6);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:1000;
+}
+.av-modal{
+  background:#0f1113;
+  border:1px solid rgba(255,255,255,0.06);
+  padding:18px;
+  width:420px;
+  border-radius:8px;
+  color:#fff;
+  box-shadow:0 8px 30px rgba(0,0,0,0.6);
+}
+.av-header{ display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; }
+.av-title{ font-weight:700; font-size:16px; }
+.av-close{ background:transparent; border:0; color:var(--muted); font-size:20px; cursor:pointer; }
+.av-note{ background:#2b1f12; padding:8px; border-radius:6px; color:#ffd98a; font-size:13px; margin-bottom:12px; }
+.av-label{ font-size:13px; color:var(--muted); margin-top:8px; display:block; }
+.av-input, .av-textarea{ width:100%; padding:10px; margin-top:6px; background:#121315; border:1px solid rgba(255,255,255,0.04); color:#fff; border-radius:6px; }
+.av-textarea{ min-height:84px; resize:vertical; }
+.av-actions{ display:flex; justify-content:flex-end; gap:8px; margin-top:12px; }
+.av-btn{ padding:8px 12px; border-radius:8px; font-weight:700; cursor:pointer; border:0; }
+.av-btn-primary{ background:linear-gradient(90deg,#4b1b66,#b13bd6); color:#fff; }
+.av-btn-ghost{ background:transparent; color:var(--muted); border:1px solid rgba(255,255,255,0.04); }
+.av-error{ color:#ff8a8a; margin-top:8px; }
