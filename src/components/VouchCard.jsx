@@ -115,10 +115,9 @@ export default function VouchCard({ vouch = {} }) {
 
           {footerText && <div className="vv-footer">{footerText}</div>}
 
-          {/* Actions: always shown so user can interact */}
+          {/* Actions: only Add Vouch remains */}
           <div className="vv-actions">
             <button className="vv-btn vv-btn-primary">⭐ Add Vouch</button>
-            <button className="vv-btn vv-btn-ghost">🌐 View Website</button>
           </div>
 
           {!hasAnyField && (
