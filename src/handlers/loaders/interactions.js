@@ -61,6 +61,13 @@ export default async (client) => {
         }
 
         logger.info(`Loaded ${loadedCount} ${type}`);
+        // Added diagnostic log: show a sample of registered keys so it's easy to validate in startup logs
+        try {
+          const keys = [...client[type].keys()];
+          logger.info(`Registered ${type} keys (sample up to 200): ${keys.slice(0, 200).join(', ')}`);
+        } catch (e) {
+          logger.debug(`Unable to enumerate registered ${type} keys: ${e.message}`);
+        }
       } catch (error) {
         if (error.code !== 'ENOENT') {
           logger.error(`Error loading ${type}:`, error);
