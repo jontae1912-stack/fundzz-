@@ -43,8 +43,29 @@ export default {
 
         // Store vouch in database
         try {
+            // Try to obtain a sequential count from the database if available
+            let existingCount = 0;
+            try {
+                if (interaction.client.db) {
+                    if (typeof interaction.client.db.countVouches === 'function') {
+                        existingCount = await interaction.client.db.countVouches(interaction.guildId);
+                    } else if (typeof interaction.client.db.getVouchesForGuild === 'function') {
+                        const list = await interaction.client.db.getVouchesForGuild(interaction.guildId);
+                        existingCount = Array.isArray(list) ? list.length : 0;
+                    } else if (typeof interaction.client.db.getVouches === 'function') {
+                        const list = await interaction.client.db.getVouches({ guildId: interaction.guildId });
+                        existingCount = Array.isArray(list) ? list.length : 0;
+                    }
+                }
+            } catch (e) {
+                logger.warn('Could not fetch vouch count from DB, falling back to timestamp id', e);
+                existingCount = 0;
+            }
+
+            const vouchId = existingCount ? `#${existingCount + 1}` : `#${Date.now()}`;
+
             const vouchData = {
-                vouchId: `V${Date.now()}`,
+                vouchId: vouchId,
                 vouchedUser: vouchedUser.id,
                 vouchedUserTag: vouchedUser.tag,
                 vouchedUserAvatar: vouchedUser.displayAvatarURL({ extension: 'png', size: 512 }),

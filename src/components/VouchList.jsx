@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import VouchEmbed from './VouchEmbed';
+import VouchCard from './VouchCard';
 import AddVouchModal from './AddVouchModal';
 
 export default function VouchList() {
@@ -16,12 +16,19 @@ export default function VouchList() {
   const handleClose = () => setModalOpen(false);
 
   const handleSubmit = (newVouch) => {
+    // Double-check uniqueness
     if (existingRatings.includes(newVouch.rating)) {
       alert('That rating is already used by another staff. Each staff must have a unique rating.');
       return;
     }
 
-    setVouches(prev => [newVouch, ...prev]);
+    // Assign a sequential ID based on current number of vouches (#1, #2, ...)
+    setVouches(prev => {
+      const nextNumber = prev.length + 1;
+      const id = `#${nextNumber}`;
+      const vWithId = { ...newVouch, id };
+      return [vWithId, ...prev];
+    });
   };
 
   return (
@@ -33,9 +40,7 @@ export default function VouchList() {
       </div>
 
       {vouches.map(v => (
-        <div key={v.id} style={{ marginBottom: 12 }}>
-          <VouchEmbed vouch={v} />
-        </div>
+        <VouchCard key={v.id} vouch={v} onAdd={handleAddClick} />
       ))}
 
       <AddVouchModal isOpen={modalOpen} onClose={handleClose} onSubmit={handleSubmit} existingRatings={existingRatings} />

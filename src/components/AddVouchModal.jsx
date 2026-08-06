@@ -35,9 +35,8 @@ export default function AddVouchModal({ isOpen, onClose, onSubmit, existingRatin
     if (!Number.isInteger(r) || r < 1 || r > 5) return setError('Rating must be an integer between 1 and 5.');
     if (existingRatings.includes(r)) return setError('That rating is already used by another staff. Each staff must have a different rating (1-5).');
 
-    // Build vouch object
+    // Build vouch object WITHOUT id; parent will assign sequential ID (#1, #2...)
     const vouch = {
-      id: `#${Math.floor(Math.random() * 9000) + 1}`,
       customer: customer || undefined,
       date: new Date().toLocaleString(),
       comment: feedback,
