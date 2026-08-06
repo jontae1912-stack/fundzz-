@@ -7,6 +7,8 @@ export default {
     // args[0] should be the vouched user's id
     const vouchedUserId = args && args[0] ? args[0] : null;
 
+    logger.info(`vouch_add button clicked by ${interaction.user?.tag || interaction.user?.id} for user ${vouchedUserId}`);
+
     const modal = new ModalBuilder()
       .setCustomId(`vouch_add_modal:${vouchedUserId}`)
       .setTitle('Add Vouch');
@@ -58,7 +60,9 @@ export default {
       await interaction.showModal(modal);
     } catch (err) {
       logger.error('Failed to show vouch_add modal:', err);
-      await interaction.reply({ content: 'Failed to open the vouch form.', ephemeral: true }).catch(() => {});
+      try {
+        await interaction.reply({ content: 'Failed to open the vouch form. The interaction may have expired.', ephemeral: true });
+      } catch {};
     }
   }
 };
