@@ -1,8 +1,3 @@
-/**
- * Canonical database key registry.
- * All storage keys should be built through these helpers.
- */
-
 export const getGuildConfigKey = (guildId) => `guild:${guildId}:config`;
 export const getGuildBirthdaysKey = (guildId) => `guild:${guildId}:birthdays`;
 export const getBirthdayLeftBackupKey = (guildId) => `guild:${guildId}:birthdays:left`;
@@ -14,6 +9,11 @@ export function getTicketKey(guildId, channelId) {
 
 export function getTicketCounterKey(guildId) {
     return `guild:${guildId}:ticket:counter`;
+}
+
+// Vouch counter key - used to generate sequential vouch IDs per guild
+export function getVouchCounterKey(guildId) {
+    return `guild:${guildId}:vouches:counter`;
 }
 
 export function getInviteTrackingKey(guildId) {

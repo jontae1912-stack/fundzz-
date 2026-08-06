@@ -1,6 +1,7 @@
-import { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } from 'discord.js';
+import { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, ModalBuilder, TextInputBuilder, TextInputStyle } from 'discord.js';
 import { logger } from '../../../utils/logger.js';
 import { InteractionHelper } from '../../../utils/interactionHelper.js';
+import { getVouchCounterKey } from '../../../utils/database/keys.js';
 
 export default {
   name: 'vouch_add_modal',
@@ -24,26 +25,38 @@ export default {
     await interaction.deferReply();
 
     try {
-      // Try to obtain a sequential count from the database if available
-      let existingCount = 0;
+      // Generate sequential vouch ID using DB-backed counter when available
+      let counter = null;
       try {
-        if (interaction.client.db) {
-          if (typeof interaction.client.db.countVouches === 'function') {
-            existingCount = await interaction.client.db.countVouches(interaction.guildId);
-          } else if (typeof interaction.client.db.getVouchesForGuild === 'function') {
-            const list = await interaction.client.db.getVouchesForGuild(interaction.guildId);
-            existingCount = Array.isArray(list) ? list.length : 0;
-          } else if (typeof interaction.client.db.getVouches === 'function') {
-            const list = await interaction.client.db.getVouches({ guildId: interaction.guildId });
-            existingCount = Array.isArray(list) ? list.length : 0;
-          }
+        if (interaction.client.db && typeof interaction.client.db.increment === 'function') {
+          counter = await interaction.client.db.increment(getVouchCounterKey(interaction.guildId), 1);
         }
       } catch (e) {
-        logger.warn('Could not fetch vouch count from DB, falling back to timestamp id', e);
-        existingCount = 0;
+        logger.warn('Could not increment vouch counter, falling back to count method', e);
+        counter = null;
       }
 
-      const vouchId = existingCount ? `#${existingCount + 1}` : `#${Date.now()}`;
+      let vouchId;
+      if (counter !== null && Number.isFinite(Number(counter))) {
+        vouchId = `#${Number(counter)}`;
+      } else {
+        // fallback: count existing vouches if helper available
+        let existingCount = 0;
+        try {
+          if (interaction.client.db) {
+            if (typeof interaction.client.db.countVouches === 'function') {
+              existingCount = await interaction.client.db.countVouches(interaction.guildId);
+            } else if (typeof interaction.client.db.getVouchesForGuild === 'function') {
+              const list = await interaction.client.db.getVouchesForGuild(interaction.guildId);
+              existingCount = Array.isArray(list) ? list.length : 0;
+            }
+          }
+        } catch (e) {
+          logger.warn('Could not fetch vouch count from DB, falling back to timestamp id', e);
+          existingCount = 0;
+        }
+        vouchId = `#${existingCount + 1}`;
+      }
 
       let vouchedUser = null;
       if (vouchedUserId) {
@@ -66,7 +79,11 @@ export default {
       };
 
       if (interaction.client.db) {
-        await interaction.client.db.saveVouch?.(vouchData);
+        // store under a predictable key and optionally append to a list
+        await interaction.client.db.set(`guild:${interaction.guildId}:vouch:${vouchId}`, vouchData);
+        if (typeof interaction.client.db.appendVouch === 'function') {
+          try { await interaction.client.db.appendVouch(interaction.guildId, vouchData); } catch {}
+        }
       }
 
       const filled = '⭐'.repeat(rating);

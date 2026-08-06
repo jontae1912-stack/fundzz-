@@ -1,19 +1,20 @@
 import { SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } from 'discord.js';
 import { logger } from '../../utils/logger.js';
 import { InteractionHelper } from '../../utils/interactionHelper.js';
+import { getVouchCounterKey } from '../../utils/database/keys.js';
 
 export default {
     data: new SlashCommandBuilder()
         .setName('vouch')
-        .setDescription('Submit a vouch for a user')
+        .setDescription('Submit a new vouch for another user')
         .addUserOption(option =>
             option.setName('user').setDescription('User to vouch for').setRequired(true)
         )
         .addStringOption(option =>
-            option.setName('comment').setDescription('Your feedback').setRequired(true)
+            option.setName('comment').setDescription('Comment about the user').setRequired(true)
         )
         .addIntegerOption(option =>
-            option.setName('rating').setDescription('Rating 1-5').setRequired(true).setMinValue(1).setMaxValue(5)
+            option.setName('rating').setDescription('Rating from 1 to 5').setRequired(true).setMinValue(1).setMaxValue(5)
         ),
 
     async execute(interaction) {
@@ -41,31 +42,47 @@ export default {
             return;
         }
 
-        // Store vouch in database
         try {
-            // Try to obtain a sequential count from the database if available
-            let existingCount = 0;
+            // Prefer database-backed sequential counter if available
+            let nextNumber = null;
             try {
-                if (interaction.client.db) {
-                    if (typeof interaction.client.db.countVouches === 'function') {
-                        existingCount = await interaction.client.db.countVouches(interaction.guildId);
-                    } else if (typeof interaction.client.db.getVouchesForGuild === 'function') {
-                        const list = await interaction.client.db.getVouchesForGuild(interaction.guildId);
-                        existingCount = Array.isArray(list) ? list.length : 0;
-                    } else if (typeof interaction.client.db.getVouches === 'function') {
-                        const list = await interaction.client.db.getVouches({ guildId: interaction.guildId });
-                        existingCount = Array.isArray(list) ? list.length : 0;
-                    }
+                if (interaction.client.db && typeof interaction.client.db.increment === 'function') {
+                    nextNumber = await interaction.client.db.increment(getVouchCounterKey(interaction.guildId), 1);
                 }
             } catch (e) {
-                logger.warn('Could not fetch vouch count from DB, falling back to timestamp id', e);
-                existingCount = 0;
+                logger.warn('Failed to increment vouch counter in DB, falling back to counting existing vouches', e);
+                nextNumber = null;
             }
 
-            const vouchId = existingCount ? `#${existingCount + 1}` : `#${Date.now()}`;
+            // Fallback: count existing vouches (if helper exists) or timestamp
+            let vouchId;
+            if (nextNumber !== null && Number.isFinite(Number(nextNumber))) {
+                vouchId = `#${Number(nextNumber)}`;
+            } else {
+                // try existing count methods
+                let existingCount = 0;
+                try {
+                    if (interaction.client.db) {
+                        if (typeof interaction.client.db.countVouches === 'function') {
+                            existingCount = await interaction.client.db.countVouches(interaction.guildId);
+                        } else if (typeof interaction.client.db.getVouchesForGuild === 'function') {
+                            const list = await interaction.client.db.getVouchesForGuild(interaction.guildId);
+                            existingCount = Array.isArray(list) ? list.length : 0;
+                        } else if (typeof interaction.client.db.getVouches === 'function') {
+                            const list = await interaction.client.db.getVouches({ guildId: interaction.guildId });
+                            existingCount = Array.isArray(list) ? list.length : 0;
+                        }
+                    }
+                } catch (e) {
+                    logger.warn('Could not fetch vouch count from DB, falling back to timestamp id', e);
+                    existingCount = 0;
+                }
+
+                vouchId = `#${existingCount + 1}`;
+            }
 
             const vouchData = {
-                vouchId: vouchId,
+                vouchId,
                 vouchedUser: vouchedUser.id,
                 vouchedUserTag: vouchedUser.tag,
                 vouchedUserAvatar: vouchedUser.displayAvatarURL({ extension: 'png', size: 512 }),
@@ -77,18 +94,18 @@ export default {
                 guildId: interaction.guildId,
             };
 
-            // Save to database (you can use your existing database setup)
             if (interaction.client.db) {
-                // Save to database
-                await interaction.client.db.saveVouch?.(vouchData);
+                await interaction.client.db.set(`guild:${interaction.guildId}:vouch:${vouchId}`, vouchData);
+                // also try to save to a list if helper exists
+                if (typeof interaction.client.db.appendVouch === 'function') {
+                    try { await interaction.client.db.appendVouch(interaction.guildId, vouchData); } catch {};
+                }
             }
 
-            // Build polished star display
             const filled = '⭐'.repeat(rating);
             const empty = '☆'.repeat(Math.max(0, 5 - rating));
             const stars = `${filled}${empty}`;
 
-            // Create a richer embed that looks better in Discord
             const embed = new EmbedBuilder()
                 .setColor('#8B3BE6')
                 .setTitle('⭐ New Vouch Received')
